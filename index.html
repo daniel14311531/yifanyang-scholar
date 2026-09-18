@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Name — Academic Homepage</title>
+  <meta name="description" content="Personal academic homepage of Your Name, Ph.D. student in Computer Science." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Your Name — Academic Homepage" />
+  <meta property="og:description" content="Ph.D. student in Computer Science." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+    <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="5"/><g stroke-linecap="round"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></g></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  </button>
+
+  <div class="layout">
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar">
+      <img class="avatar" src="assets/avatar.svg" alt="Portrait of Your Name" width="132" height="132" />
+      <h1 class="name">Your Name</h1>
+      <p class="title">Ph.D. Student</p>
+      <p class="affil">
+        <a href="https://www.example.edu" target="_blank" rel="noopener">Department of Computer Science</a><br />
+        Example University
+      </p>
+
+      <nav class="nav" aria-label="Section navigation">
+        <a href="#about">About</a>
+        <a href="#news">News</a>
+        <a href="#publications">Publications</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#service">Service</a>
+      </nav>
+
+      <ul class="links" aria-label="External links">
+        <li>
+          <span class="link-label">Email</span>
+          <a href="mailto:you@example.edu">you@example.edu</a>
+        </li>
+        <li>
+          <span class="link-label">Scholar</span>
+          <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+        </li>
+        <li>
+          <span class="link-label">GitHub</span>
+          <a href="https://github.com/" target="_blank" rel="noopener">github.com/you</a>
+        </li>
+        <li>
+          <span class="link-label">CV</span>
+          <a href="assets/cv.pdf" target="_blank" rel="noopener">PDF</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ============ MAIN ============ -->
+    <main id="main" class="content">
+
+      <section id="about">
+        <h2>About</h2>
+        <p>
+          I am a Ph.D. student in the <a href="https://www.example.edu" target="_blank" rel="noopener">Department of Computer Science</a>
+          at Example University, advised by <a href="#" target="_blank" rel="noopener">Prof. Advisor Name</a>.
+          My research lies at the intersection of <strong>machine learning</strong>, <strong>natural language processing</strong>,
+          and <strong>efficient systems</strong>.
+        </p>
+        <p>
+          I am broadly interested in building reliable and efficient models that generalize across domains.
+          Before joining Example University, I received my B.Sc. in Computer Science from Another University.
+        </p>
+        <p class="muted">
+          <strong>Research interests:</strong> Machine Learning · NLP · Efficient Inference · Interpretability
+        </p>
+      </section>
+
+      <section id="news">
+        <h2>News</h2>
+        <ul class="news-list">
+          <li><span class="date">2025.09</span> Our paper <em>“A Minimal Baseline for X”</em> was accepted at <strong>Conference Name</strong>.</li>
+          <li><span class="date">2025.06</span> Started a research internship at <strong>Some Lab</strong>.</li>
+          <li><span class="date">2025.03</span> Awarded the <strong>Best Paper Award</strong> at Workshop Name.</li>
+          <li><span class="date">2024.09</span> New preprint available on <a href="#" target="_blank" rel="noopener">arXiv</a>.</li>
+        </ul>
+      </section>
+
+      <section id="publications">
+        <h2>Publications</h2>
+        <p class="muted small">
+          <sup>*</sup> denotes equal contribution. See <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a> for the full list.
+        </p>
+
+        <ol class="pub-list">
+          <li class="pub">
+            <div class="pub-title">A Minimal Baseline for an Important Problem</div>
+            <div class="pub-authors"><strong>Your Name</strong>, Coauthor One, Coauthor Two, Advisor Name</div>
+            <div class="pub-venue">Conference on Something (CONF), 2025</div>
+            <div class="pub-links">
+              <a href="#">Paper</a><a href="#">Code</a><a href="#">Poster</a><a href="#">BibTeX</a>
+            </div>
+          </li>
+
+          <li class="pub">
+            <div class="pub-title">Efficient Inference via Structured Sparsity</div>
+            <div class="pub-authors">Coauthor One<sup>*</sup>, <strong>Your Name</strong><sup>*</sup>, Advisor Name</div>
+            <div class="pub-venue">Journal of Interesting Results, 2024</div>
+            <div class="pub-links">
+              <a href="#">Paper</a><a href="#">Code</a><a href="#">BibTeX</a>
+            </div>
+          </li>
+
+          <li class="pub">
+            <div class="pub-title">An Empirical Study of Something Surprising</div>
+            <div class="pub-authors"><strong>Your Name</strong>, Advisor Name</div>
+            <div class="pub-venue">Workshop on Works-in-Progress, 2024</div>
+            <div class="pub-links">
+              <a href="#">Paper</a><a href="#">Slides</a>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="teaching">
+        <h2>Teaching</h2>
+        <ul class="simple-list">
+          <li><span class="date">Fall 2024</span> Teaching Assistant — <em>Introduction to Machine Learning</em></li>
+          <li><span class="date">Spring 2024</span> Teaching Assistant — <em>Algorithms and Data Structures</em></li>
+        </ul>
+      </section>
+
+      <section id="service">
+        <h2>Service</h2>
+        <ul class="simple-list">
+          <li>Reviewer, Conference on Something (2025)</li>
+          <li>Sub-reviewer, Journal of Interesting Results (2024)</li>
+        </ul>
+      </section>
+
+      <footer class="footer">
+        <p>
+          © <span id="year">2025</span> Your Name ·
+          Built with plain HTML &amp; CSS ·
+          <a href="https://github.com/" target="_blank" rel="noopener">Source</a>
+        </p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/script.js"></script>
+</body>
+</html>
