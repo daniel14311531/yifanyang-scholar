@@ -66,7 +66,7 @@
                               light background, lighter on a dark one */
 
   /* Layout metrics */
-  --maxw: 1000px;     /* maximum width of the page content */
+  --maxw: 1200px;     /* maximum width of the page content */
   --sidebar-w: 320px; /* LOWER BOUND for the sidebar width, not a fixed value.
                          See section 4 for why. */
   --radius: 8px;      /* generic border radius. Reserved by the template and not
