@@ -1,25 +1,86 @@
-/* =========================================================
-   Minimal Academic Homepage — stylesheet
-   Edit the CSS variables below to restyle the whole site.
-   ========================================================= */
+@charset "UTF-8";
+/* ============================================================================
+   Minimal Academic Homepage - stylesheet
+   ----------------------------------------------------------------------------
+   Plain CSS. No preprocessor, no build step. Everything you are likely to
+   change lives in "1. Variables" below, so you can re-theme the site and
+   resize the layout without touching the individual rules.
+
+   File map (in order):
+     1.  Variables            <- colors / fonts / layout widths start here
+     2.  Reset and base typography
+     3.  Light-dark theme toggle button
+     4.  Two-column page grid  (.layout)
+     5.  Sidebar               (.sidebar: avatar, name, affiliation, nav, links)
+     6.  Main content          (.content: section headings, paragraphs)
+     7.  Date lists            (News / Awards / Teaching / Service)
+     8.  Publication list      (.pub)
+     9.  Footer
+    10.  Responsive / reduced motion / print
+
+   +- COMMON EDITS CHEAT SHEET -----------------------------------------------+
+   | Want to change             | Edit                                         |
+   | Accent color (links, hover)| --accent + --accent-hover (BOTH themes)      |
+   | Background / text / borders| --bg / --text / --text-muted / --border      |
+   | Fonts                      | --font-sans / --font-serif                   |
+   | Overall page width         | --maxw                                       |
+   | Sidebar width              | --sidebar-w (a lower bound, see section 4)   |
+   | Gap between the columns    | --gap                                        |
+   | Avatar size                | .avatar width / height                       |
+   | Date column width          | .news-list li grid-template-columns          |
+   | Mobile collapse breakpoint | @media (max-width: 820px)                    |
+   +---------------------------------------------------------------------------+
+
+   WARNING: the class names here map 1:1 onto the markup in index.html. Before
+   restyling, read sections 4 and 7 - both impose hard requirements on the HTML
+   structure, and getting them wrong breaks the layout in non-obvious ways.
+   ============================================================================ */
+
+
+/* ---------------------------------------------------------------------------
+   1. Variables - the single "config block" for the whole site
+   --------------------------------------------------------------------------- */
 
 :root {
+  /* Fonts: --font-sans is used for body copy and navigation; --font-serif is
+     used for the name and all section headings. The webfonts themselves are
+     loaded by the <link> tags in index.html. To work fully offline (no Google
+     Fonts request), swap these for system stacks, e.g.
+         --font-sans: system-ui, "Segoe UI", sans-serif;
+     Keep at least one serif fallback in --font-serif, otherwise headings will
+     silently fall back to a sans-serif face. */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
 
-  --bg: #ffffff;
-  --bg-soft: #f7f7f5;
-  --text: #1a1a1a;
-  --text-muted: #6b6b6b;
-  --border: #e6e6e3;
-  --accent: #2f5d8a;
-  --accent-hover: #1f4266;
+  /* Colors (light theme). Changes here affect the light theme ONLY - the dark
+     theme is a separate block further down. */
+  --bg: #ffffff;           /* page background */
+  --bg-soft: #f7f7f5;      /* secondary surface. Reserved by the template and not
+                              referenced by any rule yet; handy as a card or
+                              blockquote background */
+  --text: #1a1a1a;         /* body text */
+  --text-muted: #6b6b6b;   /* secondary text: dates, affiliation, footer */
+  --border: #e6e6e3;       /* dividers and outlines */
+  --accent: #2f5d8a;       /* accent: links and hover highlights */
+  --accent-hover: #1f4266; /* accent hover. Usually darker than --accent on a
+                              light background, lighter on a dark one */
 
-  --maxw: 960px;
-  --radius: 8px;
-  --gap: 3.25rem;
+  /* Layout metrics */
+  --maxw: 1000px;     /* maximum width of the page content */
+  --sidebar-w: 320px; /* LOWER BOUND for the sidebar width, not a fixed value.
+                         See section 4 for why. */
+  --radius: 8px;      /* generic border radius. Reserved by the template and not
+                         referenced yet; use it when adding new components */
+  --gap: 3.25rem;     /* column gap between the sidebar and the content */
 }
 
+/* Dark theme. assets/script.js toggles data-theme="dark" on <html>.
+   WARNING: whenever you add a new custom color variable, give it a value here
+   too. Miss it and the dark theme falls back to the light value, which usually
+   means light text on a light background.
+   To change the default theme, or to remove the toggle entirely, see
+   assets/script.js and the #theme-toggle markup (button plus the two <svg>
+   icons) in index.html. */
 [data-theme="dark"] {
   --bg: #14161a;
   --bg-soft: #1b1e24;
@@ -30,11 +91,18 @@
   --accent-hover: #a8c9e8;
 }
 
-/* ---------- Reset ---------- */
+
+/* ---------------------------------------------------------------------------
+   2. Reset and base typography
+   --------------------------------------------------------------------------- */
+
 *,
 *::before,
 *::after { box-sizing: border-box; }
 
+/* scroll-padding-top stops the sticky header offset from hiding a section
+   heading after an in-page jump (e.g. the nav link to #awards). Keep it in
+   sync with the `top` value on .sidebar in section 5. */
 html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
 
 body {
@@ -42,15 +110,18 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 16px;  /* site-wide type scale. Most other sizes are in rem, so
+                       changing this scales the whole page proportionally */
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition: background-color .25s ease, color .25s ease;
+  transition: background-color .25s ease, color .25s ease; /* theme crossfade */
 }
 
 img { max-width: 100%; display: block; }
 
+/* Every link takes its color from the theme. Do not hard-code link colors
+   elsewhere or the dark theme will look wrong. */
 a {
   color: var(--accent);
   text-decoration: none;
@@ -59,6 +130,9 @@ a {
 }
 a:hover { color: var(--accent-hover); text-decoration: underline; }
 
+/* Accessibility: the "skip to content" link, off-screen until it receives
+   keyboard focus. Restyle it freely, but do not remove it - keyboard and
+   screen-reader users rely on it. */
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -70,7 +144,15 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 }
 .skip-link:focus { left: 0; }
 
-/* ---------- Theme toggle ---------- */
+
+/* ---------------------------------------------------------------------------
+   3. Light-dark theme toggle button
+   ---------------------------------------------------------------------------
+   Fixed to the top-right corner. Change `top` / `right` below to move it (make
+   sure it does not end up overlapping the content).
+   The two icons (sun and moon) are <svg> elements in index.html; this file
+   only decides which one is visible, by switching the display of .icon-sun and
+   .icon-moon behind the [data-theme="dark"] prefix. */
 .theme-toggle {
   position: fixed;
   top: 1.25rem;
@@ -93,29 +175,80 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 [data-theme="dark"] .theme-toggle .icon-sun { display: none; }
 [data-theme="dark"] .theme-toggle .icon-moon { display: block; fill: currentColor; stroke: none; }
 
-/* ---------- Layout ---------- */
+
+/* ---------------------------------------------------------------------------
+   4. Two-column page grid (.layout)          * key to restyling *
+   ---------------------------------------------------------------------------
+   Sidebar on the left, content on the right, laid out with CSS Grid.
+
+   The `grid-template-columns` line is what makes this work:
+
+       minmax(var(--sidebar-w), max-content)   minmax(0, 1fr)
+       |
+       +-- Left column: at least --sidebar-w wide, but it grows to fit its
+       |   content. That is deliberate: it keeps the longest affiliation line
+       |   (e.g. "Nanjing University, Nanjing 210023, China") on a single line.
+       |   Affiliation lines are hard-wrapped with <br /> in the HTML, so
+       |   max-content resolves to the exact width of the longest of those
+       |   lines and the column is sized to hold it - no hard-coded pixel value
+       |   that could be wrong for a different font.
+       |
+       +-- Right column: minmax(0, 1fr) takes the remaining space.
+           WARNING: the outer minmax(0, ...) is required. A plain 1fr has an
+           automatic minimum of `auto`, so one very long link or code block
+           would blow the grid past its container and cause a horizontal
+           scrollbar.
+
+   Common edits:
+     - Fixed sidebar width (no auto-growing):
+         grid-template-columns: 350px minmax(0, 1fr);
+     - Move the sidebar to the right:
+         minmax(0, 1fr) minmax(var(--sidebar-w), max-content);
+       (also reorder <aside> and <main> in index.html so the keyboard tab order
+        still matches the visual order)
+     - Drop the sidebar and use a single column:
+         grid-template-columns: minmax(0, 1fr);
+     - Column gap: change --gap.
+     - If you raise --sidebar-w, revisit the breakpoint in section 10. */
 .layout {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 4.5rem 1.5rem 3rem;
+  padding: 4.5rem 1.5rem 3rem;  /* the 4.5rem top matches .sidebar `top` below */
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: minmax(var(--sidebar-w), max-content) minmax(0, 1fr);
   gap: var(--gap);
   align-items: start;
 }
 
-/* ---------- Sidebar ---------- */
-.sidebar { position: sticky; top: 4.5rem; }
 
+/* ---------------------------------------------------------------------------
+   5. Sidebar
+   --------------------------------------------------------------------------- */
+
+/* position: sticky keeps the sidebar pinned while the page scrolls.
+   Its `top` must match the top padding of .layout (4.5rem) in section 4; if you
+   change one, change the other or the sidebar will jump or overlap.
+   To make it scroll away with the page instead, drop `position` and `top`
+   (the responsive rules in section 10 already do exactly that in single-column
+   mode). */
+.sidebar { position: sticky; top: 4.5rem; min-width: 0; }
+
+/* Avatar. To resize it, change width and height below (keep them equal; square
+   source images work best). The circular shape comes from border-radius: 50%;
+   use something like 4px for a rounded square.
+   The image path lives in index.html (<img class="avatar" src="...">).
+   Note: the sidebar column is sized by its content, so a very large avatar will
+   also widen the sidebar. */
 .avatar {
   width: 132px;
   height: 132px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover;   /* crops non-square images instead of distorting them */
   border: 1px solid var(--border);
   margin-bottom: 1.1rem;
 }
 
+/* Display name. Serif face, 1.55rem. */
 .name {
   font-family: var(--font-serif);
   font-size: 1.55rem;
@@ -125,12 +258,18 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   letter-spacing: -0.01em;
 }
 
+/* Role / degree line (e.g. "M.Sc. Student"), shown just under .name. */
 .title {
   margin: 0;
   font-size: .95rem;
   color: var(--text-muted);
 }
 
+/* Affiliation and address. Lines are hard-wrapped with <br /> in the HTML
+   rather than left to wrap on their own - the max-content sizing in section 4
+   measures the widest of these lines, and soft wrapping would defeat it.
+   If a line is longer than --sidebar-w the sidebar simply grows; to force that
+   line to wrap instead, delete its <br /> and let it flow naturally. */
 .affil {
   margin: .7rem 0 0;
   font-size: .88rem;
@@ -138,6 +277,11 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   color: var(--text-muted);
 }
 
+/* Section navigation (About / Awards / ...). Vertical on desktop; the
+   responsive block in section 10 turns it into a wrapping horizontal row on
+   small screens.
+   To add an entry, copy one <a href="#section-id"> line in index.html. The
+   target must match an existing <section id="..."> or the link will not jump. */
 .nav {
   display: flex;
   flex-direction: column;
@@ -154,8 +298,15 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 }
 .nav a:hover { color: var(--accent); text-decoration: none; }
 
+/* Contact links (Email / GitHub / Blog / CV / ...).
+   Markup: <ul class="links"><li><span class="link-label">Label</span><a>...</a></li>... */
 .links { list-style: none; margin: 0; padding: 0; font-size: .85rem; }
 .links li { display: flex; gap: .5rem; margin-bottom: .45rem; }
+
+/* Fixed width for the label column.
+   WARNING: flex: 0 0 62px hard-codes that column to 62px. Longer labels (say
+   "Google Scholar" instead of "Scholar") will be squeezed against the link on
+   the right, so widen both this value and --sidebar-w together. */
 .link-label {
   flex: 0 0 62px;
   color: var(--text-muted);
@@ -165,33 +316,72 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   padding-top: .12rem;
 }
 
-/* ---------- Content ---------- */
-.content { min-width: 0; }
 
+/* ---------------------------------------------------------------------------
+   6. Main content
+   --------------------------------------------------------------------------- */
+
+.content { min-width: 0; }  /* as in section 4: keeps long children from
+                                 blowing out the grid */
+
+/* Vertical rhythm between sections. Make the page tighter by lowering it,
+   e.g. 2.25rem. */
 section { margin-bottom: 3rem; }
 
+/* Shared style for every section heading (About / Awards / Publications / ...).
+   This targets <h2> only; add your own rule if you introduce an <h3>. */
 h2 {
   font-family: var(--font-serif);
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 0 1rem;
   padding-bottom: .5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);  /* thin rule under each heading */
   letter-spacing: -0.005em;
 }
 
 p { margin: 0 0 1rem; }
 p:last-child { margin-bottom: 0; }
 
+/* Utility classes, applied directly in the HTML:
+     <p class="muted small">  grey small print, good for footnotes */
 .muted { color: var(--text-muted); }
 .small { font-size: .88rem; }
 
-/* ---------- News / Teaching / Service ---------- */
+
+/* ---------------------------------------------------------------------------
+   7. Date lists - News / Awards / Teaching / Service      * strict HTML rules *
+   ---------------------------------------------------------------------------
+   WARNING: each <li> must have exactly two direct children, and the body text
+   MUST be wrapped in .item-text:
+
+       <li>
+         <span class="date">2025.09</span>
+         <span class="item-text">Text here; <em>, <strong>, <a> are fine inside.</span>
+       </li>
+
+   Why: <li> is display: grid with two columns (date + content). If the body
+   text is not wrapped in a single .item-text, every inline element inside it
+   (<em>, <strong>, <a>) becomes its own grid item and is laid into the columns
+   in order - so they all land in the 80px date column and the text is squeezed
+   into a vertical stack. This is the easiest mistake to make in this template.
+
+   Two list flavors:
+     - With dates      -> <ul class="news-list"> (or simple-list)
+     - Without dates   -> <ul class="plain-list"> (e.g. Service). Items are not
+                          gridded and each one spans the full width.
+
+   To add another section of the same kind, copy the whole
+   <section id="awards"> block from index.html; this file usually needs no
+   change at all. */
 .news-list, .simple-list, .plain-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
+/* Date column is 80px wide. If your dates are much longer than "2025.09"
+   (e.g. "September 2025"), raise the first value of grid-template-columns. */
 .news-list li, .simple-list li {
   display: grid;
   grid-template-columns: 80px 1fr;
@@ -199,15 +389,21 @@ p:last-child { margin-bottom: 0; }
   padding: .42rem 0;
   font-size: .94rem;
 }
-/* Keep the text column from collapsing / keep inline tags in one run */
+
+/* Body-text wrapper. min-width: 0 stops the content column from being stretched
+   by a long link or word. This class is added explicitly in the HTML (see
+   above); it has no default styling to inherit from. */
 .item-text { min-width: 0; }
 
-/* Date-less list (e.g. Service): let each item use the full width */
+/* Date-less list: no grid, each item spans the full width. */
 .plain-list li {
   padding: .42rem 0;
   font-size: .94rem;
 }
 
+/* The date cell. tabular-nums makes the digits monospaced so stacked dates
+   line up vertically. white-space: nowrap keeps a date from breaking across
+   two lines inside its narrow column. */
 .date {
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
@@ -216,11 +412,26 @@ p:last-child { margin-bottom: 0; }
   white-space: nowrap;
 }
 
-/* ---------- Publications ---------- */
+
+/* ---------------------------------------------------------------------------
+   8. Publication list
+   ---------------------------------------------------------------------------
+   Markup, as used by <ol class="pub-list"> in index.html:
+       <li class="pub">
+         <div class="pub-title">    title
+         <div class="pub-authors">  authors; bold your own name with <strong>
+         <div class="pub-venue">    venue + year
+         <div class="pub-links">    <a>Paper</a><a>Code</a>... pill buttons
+       </li> */
+
 .pub-list { list-style: none; margin: 1.5rem 0 0; padding: 0; counter-reset: pub; }
+
+/* Entry numbers are generated by a CSS counter - never type them by hand:
+     counter-reset: pub on .pub-list, counter-increment on .pub::before.
+   Add, remove, or reorder <li class="pub"> and the numbering follows. */
 .pub {
   position: relative;
-  padding: 0 0 1.6rem 2.2rem;
+  padding: 0 0 1.6rem 2.2rem;   /* the 2.2rem left padding is the number gutter */
   margin-bottom: 1.6rem;
   border-bottom: 1px solid var(--border);
 }
@@ -246,6 +457,9 @@ p:last-child { margin-bottom: 0; }
 .pub-authors { font-size: .92rem; margin-bottom: .2rem; }
 .pub-venue { font-size: .88rem; color: var(--text-muted); font-style: italic; margin-bottom: .5rem; }
 
+/* Link buttons under each entry (Paper / Code / BibTeX / ...).
+   Adding one is just another <a href="..."> in the HTML - the styling is
+   automatic. To make them stand out, set color / border-color to var(--accent). */
 .pub-links { display: flex; flex-wrap: wrap; gap: .4rem; }
 .pub-links a {
   font-size: .76rem;
@@ -261,7 +475,11 @@ p:last-child { margin-bottom: 0; }
   text-decoration: none;
 }
 
-/* ---------- Footer ---------- */
+
+/* ---------------------------------------------------------------------------
+   9. Footer
+   --------------------------------------------------------------------------- */
+
 .footer {
   margin-top: 4rem;
   padding-top: 1.5rem;
@@ -271,25 +489,42 @@ p:last-child { margin-bottom: 0; }
 }
 .footer p { margin: 0; }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 760px) {
+
+/* ---------------------------------------------------------------------------
+   10. Responsive
+   ---------------------------------------------------------------------------
+   820px is the "two columns -> one column" collapse point. It is tied to
+   --sidebar-w: below roughly this width the two columns become too cramped to
+   read, so the layout stacks, with the sidebar first and the content after it.
+   WARNING: if you raise --sidebar-w (say to 380px), raise this breakpoint too
+   (say to 900px), otherwise the content column gets squeezed in the mid range.
+   WARNING: this breakpoint appears exactly once in the file. Change it here
+   only; do not introduce a second set of breakpoints. */
+@media (max-width: 820px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr;   /* single column: sidebar then content */
     gap: 2.5rem;
     padding-top: 3.5rem;
   }
-  .sidebar { position: static; }
+  .sidebar { position: static; }  /* not sticky when stacked; scrolls normally */
   .avatar { width: 104px; height: 104px; }
-  .nav { flex-direction: row; flex-wrap: wrap; gap: 1rem; }
+  .nav { flex-direction: row; flex-wrap: wrap; gap: 1rem; } /* nav goes horizontal */
+  /* Narrower date column on phones. Keep this <= the 80px used on desktop. */
   .news-list li, .simple-list li { grid-template-columns: 72px 1fr; }
 }
 
+/* Accessibility: when the OS requests reduced motion, disable smooth scrolling
+   and every transition. New animations are covered automatically by the `*`
+   selector here. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
 
-/* ---------- Print ---------- */
+/* Print / export to PDF: hide interactive chrome, flatten to a single column,
+   and recolor links to body text so they stay readable on paper.
+   If you add screen-only decorative elements, add them to the display: none
+   list below. */
 @media print {
   .theme-toggle, .nav { display: none; }
   .layout { grid-template-columns: 1fr; padding: 0; max-width: 100%; }
