@@ -186,8 +186,8 @@ p:last-child { margin-bottom: 0; }
 .muted { color: var(--text-muted); }
 .small { font-size: .88rem; }
 
-/* ---------- News ---------- */
-.news-list, .simple-list {
+/* ---------- News / Teaching / Service ---------- */
+.news-list, .simple-list, .plain-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -199,11 +199,21 @@ p:last-child { margin-bottom: 0; }
   padding: .42rem 0;
   font-size: .94rem;
 }
+/* Keep the text column from collapsing / keep inline tags in one run */
+.item-text { min-width: 0; }
+
+/* Date-less list (e.g. Service): let each item use the full width */
+.plain-list li {
+  padding: .42rem 0;
+  font-size: .94rem;
+}
+
 .date {
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
   font-size: .82rem;
   padding-top: .18rem;
+  white-space: nowrap;
 }
 
 /* ---------- Publications ---------- */
