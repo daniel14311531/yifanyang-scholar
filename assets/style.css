@@ -18,6 +18,11 @@
      9.  Footer
     10.  Responsive / reduced motion / print
 
+   Companion files:
+     assets/fonts.css          @font-face rules for the self-hosted webfonts
+     assets/fonts/*.woff2      the font files themselves (offline, no CDN)
+     assets/script.js          theme toggle + footer year
+
    +- COMMON EDITS CHEAT SHEET -----------------------------------------------+
    | Want to change             | Edit                                         |
    | Accent color (links, hover)| --accent + --accent-hover (BOTH themes)      |
@@ -43,9 +48,11 @@
 
 :root {
   /* Fonts: --font-sans is used for body copy and navigation; --font-serif is
-     used for the name and all section headings. The webfonts themselves are
-     loaded by the <link> tags in index.html. To work fully offline (no Google
-     Fonts request), swap these for system stacks, e.g.
+     used for the name and all section headings.
+     The two families are SELF-HOSTED and loaded offline - the @font-face rules
+     and the woff2 files live in assets/fonts.css and assets/fonts/. Nothing
+     here requests Google Fonts, so the site works with no network access.
+     To swap in system fonts instead, just override these two variables, e.g.
          --font-sans: system-ui, "Segoe UI", sans-serif;
      Keep at least one serif fallback in --font-serif, otherwise headings will
      silently fall back to a sans-serif face. */

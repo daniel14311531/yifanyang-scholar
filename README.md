@@ -8,6 +8,12 @@
 scholarwebsite/
 ├── index.html            # 页面内容（主要编辑这个文件）
 ├── assets/
+│   ├── fonts.css         # 自托管字体的 @font-face 声明（离线，不请求 Google）
+│   ├── fonts/            # 字体文件（woff2）+ OFL 许可证
+│   │   ├── inter.woff2
+│   │   ├── source-serif-4.woff2
+│   │   ├── OFL-Inter.txt
+│   │   └── OFL-Source-Serif-4.txt
 │   ├── style.css         # 样式（改顶部 CSS 变量即可换主题）
 │   ├── script.js         # 深色模式切换 + 年份
 │   ├── avatar.svg        # 头像占位图（替换成自己的照片）
@@ -15,6 +21,8 @@ scholarwebsite/
 ├── .nojekyll             # 让 GitHub Pages 按原样发布
 └── README.md
 ```
+
+页面**不加载任何外部资源**：字体已本地化，离线可用，也就不存在第三方请求。
 
 ## 本地预览
 
@@ -59,6 +67,23 @@ npx serve .
   --text: #1a1a1a;     /* 正文字色 */
 }
 ```
+
+### 换字体
+
+字体是**自托管**的，不依赖 Google Fonts：`@font-face` 在 `assets/fonts.css`，
+字体文件在 `assets/fonts/`。当前是 Inter（无衬线）+ Source Serif 4（衬线），
+两个都是**可变字体**，各一个 woff2 就覆盖了全部字重。
+
+- **只想换成系统字体**：不用动 `fonts.css`，直接改 `assets/style.css` 里的
+  `--font-sans` / `--font-serif` 变量即可（建议保留一个衬线兜底）。
+- **想换别的网络字体**：把新字体按同样方式放进 `assets/fonts/`，
+  在 `assets/fonts.css` 里改 `@font-face`；详细步骤（含如何从 Google Fonts
+  取得 woff2 直链、只拉 latin 子集）写在该文件顶部的注释里。
+- 若以后要显示中文，需自行加入中文字体或接受回退到系统字体（当前字体只含
+  latin 子集）。
+
+> 字体许可证：Inter 与 Source Serif 4 均为 SIL OFL 1.1，允许自托管与再分发。
+> 许可证原文随字体一起放在 `assets/fonts/`，**不能删**。
 
 ## 部署到 GitHub Pages
 
@@ -105,7 +130,8 @@ https://<你的用户名>.github.io/<仓库名>/
 
 - **页面 404**：确认 Settings → Pages 的 Source 分支是 `main`，且 `/ (root)`；改动后需等待 1–3 分钟。
 - **样式没生效**：检查 `assets/style.css` 路径大小写是否一致（GitHub Pages 服务器区分大小写）。
-- **图标 / 字体不显示**：字体来自 Google Fonts，需要联网；离线时自动回退到系统字体，不影响使用。
+- **图标 / 字体不显示**：字体已自托管在 `assets/fonts/`，离线也能正常显示。
+  只有 Emoji（如页签图标 🎓）依赖系统字体，属于正常现象。
 
 ## License
 
